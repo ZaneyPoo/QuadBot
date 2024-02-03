@@ -61,7 +61,7 @@ then
     chmod "$USER_RW_PERMS" .env || print_error "$CHMOD_ERROR"
     print_success
 
-elif [[ $(stat -c "%a" "$ENV_FILE") -ne $USER_RW_PERMS ]]
+elif [[ $(stat -c "%a" "$ENV_FILE") -ne $USER_RW_PERMS ]];
 then
     echo " Warning: the file permissions for your .env file aren't strict enough."
     echo " Current: $(stat -c "%A" "$ENV_FILE")"

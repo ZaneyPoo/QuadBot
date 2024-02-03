@@ -1,0 +1,205 @@
+{
+    "cmd_options": 
+    {
+        "let_drew_use_lobby_code": true,
+        "disable_react_hooks": false
+    },
+
+    "users":
+    {
+        "global":
+        {
+            "react_hooks":
+            {
+                "karla": 
+                {
+                    "enabled": true,
+                    "type": "reaction", 
+                    "content": ":karla:"
+                }
+            }
+        },
+        "drew": 
+        {
+            "username": "aerothieus",
+            "elo": 0,
+            "react_modifier": 100,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "blake": 
+        {
+            "username": "redbeard66",
+            "elo": 0,
+            "react_modifier": 100,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "michaela": 
+        {
+            "username": "duckiefloat.",
+            "elo": 10,
+            "react_modifier": 100,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "patrick": 
+        {
+            "username": "bxnesoop",
+            "elo": -1,
+            "react_modifier": 100,
+            "react_hooks": 
+            {
+                "*":
+                {
+                    "enabled": true,
+                    "type": "reaction",
+                    "content": ":patrick:"
+                },
+                "balls":
+                {
+                    "enabled": true,
+                    "type": "reply",
+                    "content": "balls"
+                }
+            },
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "rickie": 
+        {
+            "username": "littlest.man",
+            "elo": 0,
+            "react_modifier": 100,
+            "react_hooks": 
+            {
+                "*":
+                {
+                    "enabled": true,
+                    "type": "reply",
+                    "content": "hi"
+                }
+            },
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "zane": 
+        {
+            "username": "_zaneypoo",
+            "elo": 0,
+            "react_modifier": 100,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "quadbot":
+        {
+            "username": "QuadBot#0776",
+            "elo": "Bigger than yours",
+            "react_modifier": 0,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        },
+        "karlabot":
+        {
+            "username": "KarlaBot#8221",
+            "elo": "Error: integer overflow",
+            "react_modifier": 100000,
+            "react_hooks": {},
+            "edited_msg": 
+            {
+                "before": "",
+                "after": ""
+            }
+        }
+    },
+
+    "realnames":
+    {
+        "aerothieus": "drew",
+        "redbeard66": "blake",
+        "duckiefloat.": "michaela",
+        "bxnesoop": "patrick",
+        "littlest.man": "rickie",
+        "_zaneypoo": "zane",
+        "QuadBot#0776": "quadbot",
+        "KarlaBot#8221": "karlabot"
+    },
+
+    "emoji_codes":
+    {
+        ":karla:": "<:karla:1175357148318924840>",
+        ":zane:": "<a:zane:1141487995464204351>",
+        ":patrick:": "<:patrick:1141882273860440094>",
+        ":nominate:": ":star:"
+    },
+
+    "error_messages": 
+    [
+        "What the fuck does that mean?",
+        "wat",
+        "Uhh excuse me? What did you just call me?",
+        "Bro you gotta speak into the microphone fr",
+        "Hold the button until you are finished talking.",
+        "Are you having a stroke?",
+        "I have no idea what that means",
+        "Are you Karla? That shit didn't make no sense.",
+        "Bro is speaking Yapanese rn. Wtf does this mean??",
+        "Try again, Bozo",
+        "One more time, please?",
+        "Who the fuck taught you to type?",
+        "I'm not even gonna dignify this with a response.",
+        "Usually, I'd give an actually helpful error message. Usually.",
+        "Nani??"
+    ],
+
+    "reject_messages": 
+    [
+        "No. Not for you.",
+        "No.",
+        "Not for you, lil bro :skull:",
+        ":skull: :skull",
+        "No. STFU."
+    ],
+
+    "statuses":
+    [
+        "Fiending for Palworld",
+        "Rubbering your band",
+        "Down by the river, down by the old main drag",
+        "Losing at Valo",
+        "Being toxic in chat",
+        "Eating a cubano sandwich",
+        "Deleting your reacts",
+        "Switching off Ball",
+        "Maining Light",
+        "Shouting the ghost's name",
+        "Kidnapping Tanner",
+        "Fortnite dancing"
+    ]
+}

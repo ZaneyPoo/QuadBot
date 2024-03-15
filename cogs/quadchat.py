@@ -62,9 +62,9 @@ class QuadChat(commands.Cog):
     @commands.hybrid_command(
         name = "antisnake",
         description = "Begone stupid snake!!!",
-        aliases=["us", "antisnake", "as", "nosnek"]
+        aliases=["as", "us", "unsnake", "nosnek"]
     )
-    async def unsnake(self, ctx: commands.Context) -> None:
+    async def antisnake(self, ctx: commands.Context) -> None:
         if self.edited_msg is None:
             await ctx.reply("No recently edited messages :sob:")
             return

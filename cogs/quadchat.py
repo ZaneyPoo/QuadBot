@@ -60,7 +60,7 @@ class QuadChat(commands.Cog):
 
 
     @commands.hybrid_command(
-        name = "Antisnake",
+        name = "antisnake",
         description = "Begone stupid snake!!!",
         aliases=["us", "antisnake", "as", "nosnek"]
     )

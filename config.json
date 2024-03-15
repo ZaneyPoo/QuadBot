@@ -1,154 +1,19 @@
 {
-    "cmd_options": 
+
+    "options":
     {
         "let_drew_use_lobby_code": true,
         "disable_react_hooks": false
     },
 
-    "users":
+    "react_hooks":
     {
-        "global":
+        "karla": 
         {
-            "react_hooks":
-            {
-                "karla": 
-                {
-                    "enabled": true,
-                    "type": "reaction", 
-                    "content": ":karla:"
-                }
-            }
-        },
-        "drew": 
-        {
-            "username": "aerothieus",
-            "elo": 0,
-            "react_modifier": 100,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "blake": 
-        {
-            "username": "redbeard66",
-            "elo": 0,
-            "react_modifier": 100,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "michaela": 
-        {
-            "username": "duckiefloat.",
-            "elo": 10,
-            "react_modifier": 100,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "patrick": 
-        {
-            "username": "bxnesoop",
-            "elo": -1,
-            "react_modifier": 100,
-            "react_hooks": 
-            {
-                "*":
-                {
-                    "enabled": true,
-                    "type": "reaction",
-                    "content": ":patrick:"
-                },
-                "balls":
-                {
-                    "enabled": true,
-                    "type": "reply",
-                    "content": "balls"
-                }
-            },
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "rickie": 
-        {
-            "username": "littlest.man",
-            "elo": 0,
-            "react_modifier": 100,
-            "react_hooks": 
-            {
-                "*":
-                {
-                    "enabled": true,
-                    "type": "reply",
-                    "content": "hi"
-                }
-            },
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "zane": 
-        {
-            "username": "_zaneypoo",
-            "elo": 0,
-            "react_modifier": 100,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "quadbot":
-        {
-            "username": "QuadBot#0776",
-            "elo": "Bigger than yours",
-            "react_modifier": 0,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
-        },
-        "karlabot":
-        {
-            "username": "KarlaBot#8221",
-            "elo": "Error: integer overflow",
-            "react_modifier": 100000,
-            "react_hooks": {},
-            "edited_msg": 
-            {
-                "before": "",
-                "after": ""
-            }
+            "enabled": true,
+            "react_type": "reaction", 
+            "content": ":karla:"
         }
-    },
-
-    "realnames":
-    {
-        "aerothieus": "drew",
-        "redbeard66": "blake",
-        "duckiefloat.": "michaela",
-        "bxnesoop": "patrick",
-        "littlest.man": "rickie",
-        "_zaneypoo": "zane",
-        "QuadBot#0776": "quadbot",
-        "KarlaBot#8221": "karlabot"
     },
 
     "emoji_codes":

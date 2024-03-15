@@ -1,0 +1,87 @@
+{
+    "aerothieus":
+    {
+        "aliases": ["drew", "aero"],
+        "elo": 0,
+        "react_modifier": 100,
+        "react_hooks": {}
+    },
+
+    "redbeard66":
+    {
+        "aliases": ["blake", "eonix"],
+        "elo": 0,
+        "react_modifier": 100,
+        "react_hooks": {}
+    },
+
+    "duckiefloat.": 
+    {
+        "aliases": ["michaela"],
+        "elo": 10,
+        "react_modifier": 100,
+        "react_hooks": {}
+    },
+
+    "bxnesoop":
+    {
+        "aliases": ["patrick", "pat", "flick", "bonesoup"],
+        "elo": -1,
+        "react_modifier": 100,
+        "react_hooks": 
+        {
+            "*":
+            {
+                "enabled": true,
+                "react_type": "reaction",
+                "content": ":patrick:"
+            },
+            "balls":
+            {
+                "enabled": true,
+                "react_type": "reply",
+                "content": "balls"
+            }
+        }
+    },
+
+    "littlest.man":
+    {
+        "aliases": ["rickie"],
+        "elo": 0,
+        "react_modifier": 100,
+        "react_hooks": 
+        {
+            "*":
+            {
+                "enabled": true,
+                "react_type": "reply",
+                "content": "hi"
+            }
+        }
+    },
+
+    "_zaneypoo":
+    {
+        "aliases": ["zane", "gendo", "kourior"],
+        "elo": 0,
+        "react_modifier": 100,
+        "react_hooks": {}
+    },
+
+    "QuadBot#0776":
+    {
+        "aliases": ["quadbot", "qb"],
+        "elo": "Bigger than yours",
+        "react_modifier": 0,
+        "react_hooks": {}
+    },
+
+    "KarlaBot#8221":
+    {
+        "aliases": ["karlabot", "kb"],
+        "elo": "Error: integer overflow",
+        "react_modifier": 100000,
+        "react_hooks": {}
+    }
+}

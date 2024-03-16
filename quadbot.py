@@ -9,19 +9,16 @@ from discord.ext import commands
 
 class QuadBot(commands.Bot):
     _CONFIG_FILE = "config.json"
-    _CHATTERS_FILE = "chatters.json"
     _LABRADORATORY_ID = 1175185230118781189
     _GAME_CHAT_ID = 1123822985120321536 
 
     def __init__(self, 
                  prefix: str | set[str], 
                  intents: discord.Intents, 
-                 config_file: str = _CONFIG_FILE,
-                 chatters_file: str = _CHATTERS_FILE) -> None:
+                 config_file: str = _CONFIG_FILE) -> None:
         super().__init__(prefix, intents=intents)
         
         self._setup_data(config_file)
-        self._setup_chatters(chatters_file)
 
 
     # TODO: setup SQLite database instead of using JSON as a glorified db
@@ -38,13 +35,6 @@ class QuadBot(commands.Bot):
         ]
 
 
-        # self.global_react_hooks = [ReactHook(**react_hooks[key]) for key in react_hooks.keys()]
-
-
-    def _setup_chatters(self, chatters_file: str) -> None:
-        chatters = self.load_json(chatters_file)
-
-
     def load_json(self, file: str) -> dict | NoReturn:
         try:
             with open(file, "r") as f:
@@ -52,7 +42,6 @@ class QuadBot(commands.Bot):
         except FileNotFoundError:
             print(f"Unable to open file: {file}. Exiting...", file=sys.stderr)
             exit(1)
-
         
 
     def get_error_msg(self) -> str:
@@ -61,10 +50,6 @@ class QuadBot(commands.Bot):
 
     def get_reject_msg(self) -> str:
         return random.choice(self.reject_messages)
-
-
-    #def get_chatter(self, realname: str) -> dict:
-    #    return self.chatters[realname]
 
 
     async def randomize_presence(self) -> None:

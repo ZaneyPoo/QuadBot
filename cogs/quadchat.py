@@ -1,3 +1,7 @@
+from collections.abc import Callable
+from enum import Enum
+from dataclasses import dataclass
+from typing import Any
 import discord
 from discord.ext import commands
 from quadbot import QuadBot
@@ -10,6 +14,31 @@ ANTI_SNAKE_TEMPLATE = (
 **After**:
 {after}
 """.strip())
+
+
+class HookType(Enum):
+    REACTION = "reaction"
+    REPLY = "reply"
+    CALLBACK = "callback"
+
+
+@dataclass
+class ReactHook:
+    """
+    Data for reacting to messages in a customized way depending on various specified
+    parameters. 
+
+    :attr type_: The category 
+    :attr trigger: The necessary pattern to trigger the hook
+    :attr action: The action to take if the trigger is found in a message
+    :attr modifier: Additional parameters that must be true in order for the hook to trigger
+    """
+    type_: HookType
+    trigger: str
+    action: discord.Emoji | str | Callable
+    modifier: Callable[[Any], bool] | None = None 
+    enabled: bool = True
+
 
 class QuadChat(commands.Cog):
     # TODO: Define shutdown command to save variable values to config.json

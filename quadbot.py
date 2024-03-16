@@ -1,54 +1,10 @@
 import sys 
 import json
 import random
-from enum import Enum
 from typing import NoReturn
 
 import discord 
 from discord.ext import commands
-
-class ReactType(Enum):
-    REACTION = "reaction"
-    REPLY = "reply"
-    CALLBACK = "callback"
-
-
-class ReactHook:
-    def __init__(self, hook: str, react_type: str, content: str, enabled: bool = True) -> None:
-        self.hook = hook
-
-        if react_type == "reaction":
-            self.react_type = ReactType.REACTION
-        elif react_type == "reply":
-            self.react_type = ReactType.REPLY
-        else:
-            self.react_type = ReactType.CALLBACK
-
-        self.content = content # TODO: Make this automatically instantiate an Emoji object if has colons
-        self.enabled = enabled
-
-
-
-class Chatter:
-    def __init__(self, 
-                 bot: commands.Bot,
-                 username: str, 
-                 aliases: list[str] = [],
-                 elo: int = 0,
-                 react_hooks: list[ReactHook] = [],
-                 react_modifier: int = 100) -> None:
-        self.username = username
-        
-        self.user = discord.utils.get(bot.users, name=username)
-        self.aliases = aliases
-
-        if not self.user is None:
-            self.aliases.append(self.user.display_name)
-
-        self.elo = elo
-        self.react_hooks = react_hooks
-        self.react_modifier = react_modifier
-
 
 
 class QuadBot(commands.Bot):
@@ -81,7 +37,6 @@ class QuadBot(commands.Bot):
             discord.CustomActivity(name=status) for status in config["statuses"]
         ]
 
-        react_hooks = config["react_hooks"]
 
         # self.global_react_hooks = [ReactHook(**react_hooks[key]) for key in react_hooks.keys()]
 

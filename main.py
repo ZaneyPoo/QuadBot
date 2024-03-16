@@ -27,6 +27,11 @@ async def load_extensions(bot: commands.Bot) -> None:
 
 async def main() -> None:
     quadbot = QuadBot(PREFIX, intents=discord.Intents.all())
+
+    @quadbot.event
+    async def on_ready() -> None:
+        await quadbot.randomize_presence()
+
     async with quadbot:
         await load_extensions(quadbot)
         await quadbot.start(TOKEN)

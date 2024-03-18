@@ -91,7 +91,15 @@ class QuadChat(commands.Cog):
     @commands.hybrid_command(
         name = "antisnake",
         description = "Begone stupid snake!!!",
-        aliases=["as", "us", "unsnake", "nosnek"]
+        aliases = [
+            "as", 
+            "us", 
+            "unsnake", 
+            "nosnek",
+            "unsnek",
+            "unsanke",
+            "nosanke",
+        ]
     )
     async def antisnake(self, ctx: commands.Context) -> None:
         if self.edited_msg is None:

@@ -8,7 +8,10 @@ import discord
 from discord.ext import commands
 
 from quadbot import QuadBot
-PREFIX = "?"
+# TODO: Consider turning this into a function that returns the correct prefix
+#       based on some conditions (msg is in the test guild, etc.)
+PROD_PREFIX = '?'
+TEST_PREFIX = '~'
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -26,7 +29,11 @@ async def load_extensions(bot: commands.Bot) -> None:
 
 
 async def main() -> None:
-    quadbot = QuadBot(PREFIX, intents=discord.Intents.all())
+    prefix = TEST_PREFIX if "-t" in sys.argv else PROD_PREFIX
+    print(f"Setting prefix to '{prefix}'.", file=sys.stderr)
+
+
+    quadbot = QuadBot(prefix, intents=discord.Intents.all())
 
     @quadbot.event
     async def on_ready() -> None:

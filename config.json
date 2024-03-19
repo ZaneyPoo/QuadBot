@@ -2,8 +2,6 @@
 
     "options":
     {
-        "let_drew_use_lobby_code": true,
-        "disable_react_hooks": false
     },
 
     "react_hooks":

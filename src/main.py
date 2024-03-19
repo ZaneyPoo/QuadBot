@@ -27,7 +27,7 @@ async def load_extensions(bot: commands.Bot) -> None:
 
 
 async def main() -> None:
-    prefix = TEST_PREFIX if "-t" in sys.argv else PROD_PREFIX
+    prefix = PROD_PREFIX if os.getenv("QUADBOT_TESTING") is None else TEST_PREFIX
     print(f"Setting prefix to '{prefix}'", file=sys.stderr)
 
 

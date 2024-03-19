@@ -9,10 +9,11 @@ print_success () {
 }
 
 print_error () { 
-    echo "$(tput setaf 1)$(tput bold)Error:$(tput setaf 7) $1"
-    echo "Exiting... $(tput sgr0)"
+    echo "Error: $1"
+    echo "Exiting..."
     exit 1
 }
 
-pip install -r ./requirements.txt || print_error "$DEPEND_ERROR"
+print_start "Installing dependencies..."
+pip install -q -r ./requirements.txt || print_error "$DEPEND_ERROR"
 print_success

@@ -21,14 +21,14 @@ if TOKEN is None:
 
 
 async def load_extensions(bot: commands.Bot) -> None:
-    for filename in os.listdir("./cogs"):
+    for filename in os.listdir("src/cogs"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
 
 async def main() -> None:
     prefix = TEST_PREFIX if "-t" in sys.argv else PROD_PREFIX
-    print(f"Setting prefix to '{prefix}'.", file=sys.stderr)
+    print(f"Setting prefix to '{prefix}'", file=sys.stderr)
 
 
     quadbot = QuadBot(prefix, intents=discord.Intents.all())

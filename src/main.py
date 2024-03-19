@@ -3,7 +3,6 @@ import asyncio
 import os 
 import sys 
 
-from dotenv import load_dotenv
 import discord 
 from discord.ext import commands
 
@@ -13,7 +12,6 @@ from quadbot import QuadBot
 PROD_PREFIX = '?'
 TEST_PREFIX = '~'
 
-load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 if TOKEN is None:

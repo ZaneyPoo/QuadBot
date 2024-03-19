@@ -8,30 +8,11 @@ USER_RW_PERMS=600
 
 VENV_ERROR="couldn't create venv."
 DEPEND_ERROR="couldn't install dependencies." 
-CHMOD_ERROR="couldn't set correct permissions for .env file."
-
-SERVICE=$(cat <<-END
-[Unit]
-Description=QuadBot Service
-After=network.target
-
-[Service]
-ExecStart="$(pwd)"/"$0"
-WorkingDirectory="$(pwd)"
-StandardOutput=inherit
-StandardError=inherit
-User="$USER"
-
-[Install]
-WantedBy=multi-user.target
-END
-)
-
 
 if [[ ! -d $VENV ]];
 then 
     print_start "Setting up Python's virtual environment"
-    python3 -m venv "$VENV" ; print_error "$VENV_ERROR"
+    python3 -m venv "$VENV" || print_error "$VENV_ERROR"
     print_success
 fi
 

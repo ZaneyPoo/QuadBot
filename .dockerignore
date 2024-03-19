@@ -1,2 +1,6 @@
 .git
 .env
+pdm.lock
+pyproject.toml
+Dockerfile
+README.md

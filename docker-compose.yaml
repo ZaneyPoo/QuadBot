@@ -6,3 +6,5 @@ services:
     # You can enable testing by setting QUADBOT_TESTING to some value
     # Place Discord token here
     env_file: .env
+    volumes:
+      - .:/quadbot

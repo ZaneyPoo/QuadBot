@@ -1,10 +1,10 @@
 import sys 
 import json
 import random
-from typing import NoReturn
+from typing import Any, NoReturn
 
 import discord 
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 
 class QuadBot(commands.Bot):
@@ -25,7 +25,7 @@ class QuadBot(commands.Bot):
     def _setup_data(self, config_file: str) -> None:
         config = self.load_json(config_file)
 
-        self.options: dict[str, bool] = config["options"]
+        self.options: dict[str, Any] = config["options"]
         self.emoji_codes: dict[str, str] = config["emoji_codes"]
         self.error_messages: list[str] = config["error_messages"]
         self.reject_messages: list[str] = config["reject_messages"]
@@ -52,7 +52,8 @@ class QuadBot(commands.Bot):
         return random.choice(self.reject_messages)
 
 
-    async def randomize_presence(self) -> None:
+    @tasks.loop()
+    async def randomize_status(self) -> None:
         activity = random.choice(self.statuses)
         print(f"Setting presence to {activity}")
         await self.change_presence(activity=activity)

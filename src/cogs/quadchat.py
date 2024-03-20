@@ -156,11 +156,6 @@ class QuadChat(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_command(self) -> None:
-        await self.bot.randomize_presence()
-
-
-    @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, err: commands.CommandError) -> None:
         if isinstance(err, commands.CommandNotFound):
             print("Unknown command.")

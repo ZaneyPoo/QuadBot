@@ -33,9 +33,13 @@ async def main() -> None:
 
     quadbot = QuadBot(prefix, intents=discord.Intents.all())
 
-    @quadbot.event
+    @quadbot.listen()
     async def on_ready() -> None:
-        await quadbot.randomize_presence()
+        await quadbot.wait_until_ready()
+        quadbot.randomize_status.change_interval(
+            minutes=quadbot.options["status_update_interval_mins"]
+        )
+        quadbot.randomize_status.start()
 
     async with quadbot:
         await load_extensions(quadbot)

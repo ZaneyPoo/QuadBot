@@ -4,6 +4,7 @@ services:
   quadbot:
     image: quadbot:latest
     container_name: quadbot-docker
+    build: .
     # You can enable testing by setting QUADBOT_TESTING to some value
     # Place Discord token here
     env_file: .env

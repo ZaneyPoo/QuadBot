@@ -2,6 +2,7 @@
 
     "options":
     {
+        "status_update_interval_mins": 0.5
     },
 
     "react_hooks":

@@ -1,10 +1,9 @@
 import os
-import logging
 import discord
 from discord.ext import commands
 
 # TODO: Setup logger
-discord.utils.setup_logging(level=logging.DEBUG)
+discord.utils.setup_logging()
 
 COG_STATS_TEMPLATE = (
 """
@@ -47,10 +46,12 @@ class QuadDev(commands.Cog):
         """
         [Admin only] Reload all cogs.
         """
-        for filename in os.listdir("./cogs"):
+        # TODO: This should set to some variable (maybe from the bot instance) 
+        #       instead of being hard-coded in. This has already caused issues once.
+        for filename in os.listdir("./src/cogs"):
             if filename.endswith(".py"):
                 print(f"Reloading cog: {filename}")
-                await self.bot.reload_extension("cogs.{filename[:-3]}")
+                await self.bot.reload_extension(f"cogs.{filename[:-3]}")
 
 
     @commands.command()

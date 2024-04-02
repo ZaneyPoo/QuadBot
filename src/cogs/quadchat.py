@@ -1,10 +1,11 @@
 from collections.abc import Callable
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 import discord
 from discord.ext import commands
 from quadbot import QuadBot
+import re
 
 ANTI_SNAKE_TEMPLATE = (
 """
@@ -24,20 +25,55 @@ class HookType(Enum):
 
 @dataclass
 class ReactHook:
-    """
-    Data for reacting to messages in a customized way depending on various specified
-    parameters. 
-
-    :attr type_: The category 
-    :attr trigger: The necessary pattern to trigger the hook
-    :attr action: The action to take if the trigger is found in a message
-    :attr modifier: Additional parameters that must be true in order for the hook to trigger
-    """
     type_: HookType
-    trigger: str
-    action: discord.Emoji | str | Callable
-    modifier: Callable[[Any], bool] | None = None 
+    response: str | discord.Emoji | Callable
+    modifier: Callable[..., bool] = lambda: True 
     enabled: bool = True
+
+
+class QuadReact(commands.Cog):
+    def __init__(self, bot: QuadBot) -> None:
+        self.bot = bot
+        self._init_react_hooks()
+
+
+    def _init_react_hooks(self) -> None:
+        # TODO: Finish this. Make a run_hook method when a match is triggered.
+        self.react_hooks = {
+            "test1": ReactHook(HookType.REPLY, "test 1 trigger")
+        }
+        self.hook_pattern = re.compile('|'.join(trigger for trigger in self.react_hooks.keys()))
+
+
+    @commands.Cog.listener()
+    async def on_hook_trigger(self, msg: discord.Message, hook: ReactHook) -> None:
+        print("hook reached")
+        if not hook.enabled or not hook.modifier():
+            print(f"Hook {hook} failed modifier check or is not enabled!")
+            return 
+
+        if isinstance(hook.response, str):
+            print("Hook is a str type")
+            await msg.reply(hook.response)
+        elif isinstance(hook.response, discord.Emoji):
+            print("Hook is an Emoji type")
+            await msg.add_reaction(hook.response)
+        else:
+            print("Hook is a callable")
+            hook.response()
+
+
+    @commands.Cog.listener()
+    async def on_message(self, msg: discord.Message) -> None:
+        print(f"Got message: {msg.content}")
+        if msg.author.bot: # gtfo if user is a bot
+            return
+
+        if (matches := self.hook_pattern.findall(msg.content)):
+            print(f"Found matches for hooks: {matches}")
+            for match in matches:
+                print(f"Dispatching hook for {match}")
+                self.bot.dispatch("hook_trigger", msg, self.react_hooks[match])
 
 
 class QuadChat(commands.Cog):
@@ -45,40 +81,6 @@ class QuadChat(commands.Cog):
     def __init__(self, bot: QuadBot) -> None:
         self.bot = bot
         self.edited_msg: dict[str, str] | None = None
-
-
-    # @commands.command()
-    # async def get_react_hook(self, 
-    #               ctx: commands.Context,
-    #               user: str) -> None:
-    #     try:
-    #         hook = self.bot.chatters[user.lower()]["react_hooks"]
-    #         await ctx.reply(f"```\nHook name:\n{user}\nValue:{hook}\n```")
-    #     except KeyError:
-    #         await ctx.reply(f"Unknown user: {user}")
-
-
-    # @commands.command()
-    # async def get_elo(self, 
-    #                   ctx: commands.Context,
-    #                   user: str) -> None:
-    #     try:
-    #         elo = self.bot.chatters[user.lower()]["elo"]
-    #         await ctx.reply(f"{user}'s ELO: {elo}")
-    #     except KeyError:
-    #         await ctx.reply(f"Unknown user: {user}")
-
-
-    #@commands.command()
-    #async def show_all(self, ctx: commands.Context) -> None:
-    #    await ctx.reply(f"```\n{self.bot.chatters}\n```")
-
-
-    # @commands.command()
-    # async def show_aliases(self, 
-    #                        ctx:commands.Context,
-    #                        user: str | None = None) -> None:
-    #     await ctx.reply(f"```\n{self.bot.aliases}\n```")
 
 
     @commands.command()
@@ -105,7 +107,7 @@ class QuadChat(commands.Cog):
         if self.edited_msg is None:
             await ctx.reply("No recently edited messages :sob:")
             return
-        
+    
         embed = discord.Embed(
             title=":x: :snake: Antisnake! :x: :snake:",
             description=ANTI_SNAKE_TEMPLATE.format(**self.edited_msg)
@@ -113,39 +115,10 @@ class QuadChat(commands.Cog):
         await ctx.reply(embed=embed)
 
         
-    # # commands.command(name="++")
-    # async def plusplus(self, 
-    #                    ctx: commands.Context, 
-    #                    member: discord.User | discord.Member) -> None:
-    #     chatter = self.bot.chatters[self.bot.get_real_name(member.name)]
-    #     chatter["elo"] += 1
-    #     await ctx.reply(f"{member.name} now has an ELO of {chatter['elo']}!")
-
-
-    # # @commands.command(hidden=True, disabled=True)
-    # async def minusminus(self, 
-    #                      ctx: commands.Context, 
-    #                      member: discord.User | discord.Member) -> None:
-    #     chatter = self.bot.chatters[self.bot.get_real_name(member.name)]
-    #     chatter["elo"] -= 1
-    #     await ctx.reply(f"{member.name} now has an ELO of {chatter['elo']}!")
-
-
     @commands.Cog.listener()
-    async def on_message(self, msg: discord.Message) -> None:
-        if msg.author.bot: # gtfo if user is a bot
+    async def on_message(self, ctx: commands.Context) -> None:
+        if ctx.author.bot:
             return
-
-        # if (parts := msg.content.partition("++"))[1] == "++":
-        #     print(f"{parts[0]} plusplus")
-        #     ctx = await self.bot.get_context(msg)
-        #     await self.plusplus(ctx, msg.author)
-
-        # elif (parts := msg.content.partition("--"))[1] == "--":
-        #     print(f"{parts[0]} minusminus")
-        #     ctx = await self.bot.get_context(msg)
-        #     await self.minusminus(ctx, msg.author)
-
 
 
     @commands.Cog.listener()
@@ -156,11 +129,19 @@ class QuadChat(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, err: commands.CommandError) -> None:
+    async def on_cog_command_error(self, ctx: commands.Context, err: commands.CommandError) -> None:
         if isinstance(err, commands.CommandNotFound):
-            print("Unknown command.")
+            print(f"{err}: Unknown command.")
             await ctx.reply(self.bot.get_error_msg())
 
 
+    @commands.Cog.listener()
+    async def on_ready(self) -> None:
+        print("Loaded QuadChat cog!")
+
+
 async def setup(bot: QuadBot) -> None:
-    await bot.add_cog(QuadChat(bot))
+    await bot.add_cog(QuadReact(bot), override=True)
+    await bot.add_cog(QuadChat(bot), override=True)
+
+

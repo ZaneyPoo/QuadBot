@@ -1,5 +1,4 @@
 from collections.abc import Callable
-from enum import Enum
 from dataclasses import dataclass
 import discord
 from discord.ext import commands
@@ -16,46 +15,63 @@ ANTI_SNAKE_TEMPLATE = (
 """.strip())
 
 
-class HookType(Enum):
-    REACTION = "reaction"
-    REPLY = "reply"
-    CALLBACK = "callback"
-
-
-@dataclass
-class ReactHook:
-    type_: HookType
-    response: str | discord.Emoji | Callable
+@dataclass(kw_only=True)
+class Hook:
+    pattern: str 
     modifier: Callable[..., bool] = lambda: True 
     enabled: bool = True
+
+    async def trigger(self, msg: discord.Message) -> None:
+        ...
+
+
+@dataclass(kw_only=True)
+class ReplyHook(Hook):
+    response: str
+
+    async def trigger(self, msg: discord.Message) -> None:
+        await msg.reply(self.response)
+
+
+@dataclass(kw_only=True)
+class ReactHook(Hook):
+    response: str | discord.Emoji
+
+    async def trigger(self, msg: discord.Message) -> None:
+        await msg.add_reaction(self.response)
+
+
+HOOKS = [
+    ReplyHook(pattern="balls", response="balls"),
+    ReactHook(pattern="skull", response=chr(0x1f480)),
+]
 
 
 class QuadReact(commands.Cog):
     def __init__(self, bot: QuadBot) -> None:
         self.bot = bot
-        self._init_react_hooks()
+        self._init_hooks()
 
 
-    def _init_react_hooks(self) -> None:
-        # TODO: Finish this. Make a run_hook method when a match is triggered.
-        self.react_hooks = {
-            "test1": ReactHook(HookType.REPLY, "test 1 trigger")
-        }
-        self.hook_pattern = re.compile('|'.join(trigger for trigger in self.react_hooks.keys()))
+    def _init_hooks(self) -> None:
+        self.hooks = {hook.pattern: hook for hook in HOOKS}
+        self.hook_pattern = re.compile('|'.join(trigger for trigger in self.hooks.keys()))
+
+
+    @commands.command()
+    async def add_react(self, 
+                        ctx: commands.Context,
+                        pattern: str) -> None:
+        ...
 
 
     @commands.Cog.listener()
-    async def on_hook_trigger(self, msg: discord.Message, hook: ReactHook) -> None:
+    async def on_hook_trigger(self, msg: discord.Message, hook: Hook) -> None:
         if not hook.enabled or not hook.modifier():
             print(f"Hook {hook} failed modifier check or is not enabled!")
             return 
 
-        if isinstance(hook.response, str):
-            await msg.reply(hook.response)
-        elif isinstance(hook.response, discord.Emoji):
-            await msg.add_reaction(hook.response)
-        else:
-            hook.response()
+        await hook.trigger(msg)
 
 
     @commands.Cog.listener()
@@ -68,7 +84,7 @@ class QuadReact(commands.Cog):
             print(f"Found matches for hooks: {matches}")
             for match in matches:
                 print(f"Dispatching hook for {match}")
-                self.bot.dispatch("hook_trigger", msg, self.react_hooks[match])
+                self.bot.dispatch("hook_trigger", msg, self.hooks[match])
 
 
 class QuadChat(commands.Cog):

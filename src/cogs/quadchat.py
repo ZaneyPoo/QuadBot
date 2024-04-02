@@ -1,7 +1,6 @@
 from collections.abc import Callable
 from enum import Enum
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 import discord
 from discord.ext import commands
 from quadbot import QuadBot
@@ -47,19 +46,15 @@ class QuadReact(commands.Cog):
 
     @commands.Cog.listener()
     async def on_hook_trigger(self, msg: discord.Message, hook: ReactHook) -> None:
-        print("hook reached")
         if not hook.enabled or not hook.modifier():
             print(f"Hook {hook} failed modifier check or is not enabled!")
             return 
 
         if isinstance(hook.response, str):
-            print("Hook is a str type")
             await msg.reply(hook.response)
         elif isinstance(hook.response, discord.Emoji):
-            print("Hook is an Emoji type")
             await msg.add_reaction(hook.response)
         else:
-            print("Hook is a callable")
             hook.response()
 
 

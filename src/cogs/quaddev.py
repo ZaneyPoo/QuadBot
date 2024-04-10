@@ -50,7 +50,7 @@ class QuadDev(commands.Cog):
         #       instead of being hard-coded in. This has already caused issues once.
         for filename in os.listdir("./src/cogs"):
             if filename.endswith(".py"):
-                print(f"Reloading cog: {filename}")
+                print(f"Reloading extension: {filename}")
                 await self.bot.reload_extension(f"cogs.{filename[:-3]}")
 
 

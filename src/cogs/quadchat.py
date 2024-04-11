@@ -59,7 +59,7 @@ class ReactHook(ChatHook):
         await msg.add_reaction(self.response)
 
 
-HOOKS = [
+DEFAULT_HOOKS = [
     ReplyHook(pattern="balls", response="balls"),
     ReactHook(pattern="skull", response=chr(0x1f480)),
 ]
@@ -98,7 +98,7 @@ class QuadReact(commands.Cog):
 
 
     def _init_chathooks(self) -> None:
-        self.chathooks: dict[str, ChatHook] = {chathook.pattern: chathook for chathook in HOOKS}
+        self.chathooks: dict[str, ChatHook] = {chathook.pattern: chathook for chathook in DEFAULT_HOOKS}
         self.compiled_patterns: list[re.Pattern] = [re.compile(key) for key in self.chathooks.keys()]
 
 

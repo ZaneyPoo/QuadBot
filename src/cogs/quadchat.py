@@ -69,6 +69,9 @@ class EventHook(ChatHook):
 
 
 class AddCHFlags(commands.FlagConverter):
+    """
+    blah
+    """
     type_: Literal["reply", "reaction"] = (
         commands.flag(name="type", 
                       description="The type of ChatHook to add [reply | reaction]")
@@ -125,7 +128,6 @@ class QuadReact(commands.Cog):
         self.chathooks.update({chathook.pattern: chathook})
             
 
-    # TODO: add command specific error handling
     # FIXME: I don't know why but the flag converter doesn't display the descriptions 
     #        inside the help message for the command
     @commands.command()
@@ -138,6 +140,10 @@ class QuadReact(commands.Cog):
             re.compile(flags.pattern)
         except re.error as err:
             await ctx.reply(f"Invalid regex: {err}")
+            return
+
+        if flags.target != "global" and flags.target.bot:
+            await ctx.reply(f"Cannot use a bot as the target for a ChatHook")
             return
 
         match flags.type_:
@@ -157,6 +163,7 @@ class QuadReact(commands.Cog):
         await ctx.reply("ChatHook added successfully")
 
 
+    # TODO: add command specific error handling
     @add_hook.error
     async def add_hook_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
         print(error)
@@ -197,13 +204,6 @@ class QuadReact(commands.Cog):
                 self.bot.dispatch("chathook_trigger", msg, self.chathooks[match.re.pattern])
 
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, err: commands.CommandError) -> None:
-        if isinstance(err, commands.CommandNotFound):
-            print(f"{err}: Unknown command.")
-            await ctx.reply(self.bot.get_error_msg())
-
-    
     @commands.Cog.listener()
     async def on_ready(self) -> None:
         print("Loaded QuadReact cog!")

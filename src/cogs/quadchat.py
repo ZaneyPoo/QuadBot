@@ -59,8 +59,6 @@ class ReactHook(ChatHook):
         await msg.add_reaction(self.response)
 
 
-# TODO: Figure out how to make this work. Since these aren't supposed to be added by users,
-#       I could just add a custom event? 
 @dataclass(kw_only=True)
 class EventHook(ChatHook):
     event_name: str
@@ -99,10 +97,24 @@ class QuadReact(commands.Cog):
 
     def _init_chathooks(self) -> None:
         default_hooks = [
-            ReplyHook(pattern="balls", response="balls"),
-            ReactHook(pattern="skull", response=chr(0x1f480)),
-            EventHook(pattern=r"\w+\+\+|<@!?\d+> \+\+", event_name="elo_increment", bot=self.bot),
-            EventHook(pattern=r"\w+\-\-|<@!?\d+> \-\-", event_name="elo_decrement", bot=self.bot),
+            ReplyHook(
+                pattern="balls", 
+                response="balls"
+            ),
+            ReactHook(
+                pattern="skull", 
+                response=chr(0x1f480)
+            ),
+            EventHook(
+                pattern=r"\w+\+\+|<@!?\d+> \+\+", # Matches for a name or mention followed by ++
+                event_name="elo_increment", 
+                bot=self.bot
+            ),
+            EventHook(
+                pattern=r"\w+\-\-|<@!?\d+> \-\-", # Matches for a name or mention followed by --
+                event_name="elo_decrement", 
+                bot=self.bot
+            ),
         ]
         self.chathooks: dict[str, ChatHook] = {chathook.pattern: chathook for chathook in default_hooks}
         self.compiled_patterns: list[re.Pattern] = [re.compile(key) for key in self.chathooks.keys()]
@@ -237,13 +249,17 @@ class QuadChat(commands.Cog):
         await ctx.reply(embed=embed)
 
 
+    # TODO: Hook this up to ELO system once DB is hooked up
     @commands.Cog.listener()
     async def on_elo_increment(self, msg: discord.Message) -> None:
+        # Is there a sane way for me to pass in the name of the target without rescanning?
         print("++")
 
 
+    # TODO: Hook this up to ELO system once DB is hooked up
     @commands.Cog.listener()
     async def on_elo_decrement(self, msg: discord.Message) -> None:
+        # Is there a sane way for me to pass in the name of the target without rescanning?
         print("--")
 
 

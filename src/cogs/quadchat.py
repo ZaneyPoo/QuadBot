@@ -70,12 +70,6 @@ class EventHook(ChatHook):
         self.bot.dispatch(self.event_name, msg)
 
 
-DEFAULT_HOOKS = [
-    ReplyHook(pattern="balls", response="balls"),
-    ReactHook(pattern="skull", response=chr(0x1f480)),
-]
-
-
 class AddCHFlags(commands.FlagConverter):
     type_: Literal["reply", "reaction"] = (
         commands.flag(name="type", 
@@ -104,7 +98,13 @@ class QuadReact(commands.Cog):
 
 
     def _init_chathooks(self) -> None:
-        self.chathooks: dict[str, ChatHook] = {chathook.pattern: chathook for chathook in DEFAULT_HOOKS}
+        default_hooks = [
+            ReplyHook(pattern="balls", response="balls"),
+            ReactHook(pattern="skull", response=chr(0x1f480)),
+            EventHook(pattern=r"\w+\+\+|<@!?\d+> \+\+", event_name="elo_increment", bot=self.bot),
+            EventHook(pattern=r"\w+\-\-|<@!?\d+> \-\-", event_name="elo_decrement", bot=self.bot),
+        ]
+        self.chathooks: dict[str, ChatHook] = {chathook.pattern: chathook for chathook in default_hooks}
         self.compiled_patterns: list[re.Pattern] = [re.compile(key) for key in self.chathooks.keys()]
 
 
@@ -235,6 +235,16 @@ class QuadChat(commands.Cog):
             description=_ANTI_SNAKE_EMBED_TEMPLATE.format(**self.edited_msg)
         )
         await ctx.reply(embed=embed)
+
+
+    @commands.Cog.listener()
+    async def on_elo_increment(self, msg: discord.Message) -> None:
+        print("++")
+
+
+    @commands.Cog.listener()
+    async def on_elo_decrement(self, msg: discord.Message) -> None:
+        print("--")
 
 
     @commands.Cog.listener()

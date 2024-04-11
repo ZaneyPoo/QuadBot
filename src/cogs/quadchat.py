@@ -1,7 +1,7 @@
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Literal, Union
+from typing import Literal, Optional, Union
 import typing
 import discord
 from discord.app_commands import describe
@@ -32,23 +32,26 @@ class ChatHook:
         ...
 
 
-    def __str__(self) -> str:
-        return '\n'.join([f"{key.title}: {value}" for key, value in vars(self)])
-
-
     def embed_field(self, embed: discord.Embed) -> discord.Embed:
         return embed.add_field(
-            name=f"{self.__class__.__name__}",
-            value=str(self),
+            name=f"{str(self)}",
+            value='\n'.join([f"**{key}:** {value}" for key, value in vars(self).items()]),
+            inline=False
         )
 
 
+# TODO: Can I fix all this code duplication?
 @dataclass(kw_only=True)
 class ReplyHook(ChatHook):
     response: str
 
     async def trigger(self, msg: discord.Message) -> None:
         await msg.reply(self.response)
+
+
+    def __str__(self) -> str:
+        target = "anyone" if self.target == "global" else self.target.mention
+        return f"Reply with \"{self.response}\" if I see the pattern \"{self.pattern}\" from {target}"
 
 
 @dataclass(kw_only=True)
@@ -59,6 +62,11 @@ class ReactHook(ChatHook):
         await msg.add_reaction(self.response)
 
 
+    def __str__(self) -> str:
+        target = "anyone" if self.target == "global" else self.target.mention
+        return f"React with \"{self.response}\" if I see the pattern \"{self.pattern}\" from {target}"
+
+
 @dataclass(kw_only=True)
 class EventHook(ChatHook):
     event_name: str
@@ -66,6 +74,11 @@ class EventHook(ChatHook):
 
     async def trigger(self, msg: discord.Message) -> None:
         self.bot.dispatch(self.event_name, msg)
+
+
+    def __str__(self) -> str:
+        target = "anyone" if self.target == "global" else self.target.mention
+        return f"Trigger event \"{self.event_name}\" if I see the pattern \"{self.pattern}\" from {target}"
 
 
 class AddCHFlags(commands.FlagConverter):
@@ -167,6 +180,25 @@ class QuadReact(commands.Cog):
     @add_hook.error
     async def add_hook_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
         print(error)
+
+
+    @commands.command()
+    async def show_hooks(self, 
+                         ctx: commands.Context,
+                         verbose: Optional[bool] = False) -> None:
+        """
+        Show the currently active ChatHooks
+        """
+        embed = discord.Embed(
+            title="Current ChatHooks"
+        )
+        if verbose:
+            for hook in self.chathooks.values():
+                embed = hook.embed_field(embed)
+        else:
+            # TODO: Fix this ridiculous one liner 
+            embed.description = '\n'.join([f"{i}. {str(hook)}" for i, hook in enumerate(self.chathooks.values(), start=1)])
+        await ctx.reply(embed=embed)
 
 
     @commands.Cog.listener()
@@ -281,6 +313,8 @@ class QuadChat(commands.Cog):
         if isinstance(err, commands.CommandNotFound):
             print(f"{err}: Unknown command.")
             await ctx.reply(self.bot.get_error_msg())
+        else:
+            print(err)
 
 
     @commands.Cog.listener()

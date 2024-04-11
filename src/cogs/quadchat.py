@@ -59,15 +59,21 @@ class ReactHook(ChatHook):
         await msg.add_reaction(self.response)
 
 
+# TODO: Figure out how to make this work. Since these aren't supposed to be added by users,
+#       I could just add a custom event? 
+@dataclass(kw_only=True)
+class EventHook(ChatHook):
+    event_name: str
+    bot: commands.Bot
+
+    async def trigger(self, msg: discord.Message) -> None:
+        self.bot.dispatch(self.event_name, msg)
+
+
 DEFAULT_HOOKS = [
     ReplyHook(pattern="balls", response="balls"),
     ReactHook(pattern="skull", response=chr(0x1f480)),
 ]
-
-
-class HookManager:
-    def __init__(self, chathooks: list[ChatHook] = []) -> None:
-        ...
 
 
 class AddCHFlags(commands.FlagConverter):
@@ -134,6 +140,7 @@ class QuadReact(commands.Cog):
                 chathook = ReactHook(pattern=flags.pattern,
                                      response=flags.response,
                                      target=flags.target)
+
         self.add_chathook_pattern(chathook)
         await ctx.reply("ChatHook added successfully")
 

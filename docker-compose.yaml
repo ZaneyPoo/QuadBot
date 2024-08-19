@@ -1,5 +1,3 @@
-version: "3"
-
 services: 
   quadbot:
     image: quadbot:latest

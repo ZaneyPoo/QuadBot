@@ -1,5 +1,6 @@
 services: 
   quadbot:
+    restart: always
     image: quadbot:latest
     container_name: quadbot-docker
     build: .

@@ -20,6 +20,7 @@ _ANTI_SNAKE_EMBED_TEMPLATE = (
 {after}
 """.strip())
 
+UNSNAKEABLE_CONTEXTS = (discord.DMChannel, discord.GroupChannel)
 
 @dataclass(kw_only=True)
 class ChatHook:
@@ -251,7 +252,8 @@ class QuadChat(commands.Cog):
     # TODO: Define shutdown command to save variable values to config.json
     def __init__(self, bot: QuadBot) -> None:
         self.bot = bot
-        self.edited_msg: dict[str, str] | None = None
+        self.edited_msgs: dict[int, tuple[discord.Message, discord.Message]] = {}
+        self.deleted_msgs: dict[int, discord.Message] = {}
 
 
     @commands.command()
@@ -275,15 +277,26 @@ class QuadChat(commands.Cog):
         ]
     )
     async def antisnake(self, ctx: commands.Context) -> None:
-        if self.edited_msg is None:
+        # This should prevent use outside the context of Guilds
+        if ctx.guild is None:
+            print("guild is none")
+            await ctx.reply("Antisnake is only available for servers :/")
+            return
+
+        last_edit = self.edited_msgs.get(ctx.guild.id)
+
+        if last_edit is None:
+            print("last_edit is none")
             await ctx.reply("No recently edited messages :sob:")
             return
 
+        before, after = last_edit
         embed = discord.Embed(
             title=":x: :snake: Antisnake! :x: :snake:",
-            description=_ANTI_SNAKE_EMBED_TEMPLATE.format(**self.edited_msg)
-        )
+            description=_ANTI_SNAKE_EMBED_TEMPLATE.format(before=before.content, after=after.content)
+        ).set_author(name=before.author.display_name, icon_url=before.author.display_avatar)
         await ctx.reply(embed=embed)
+        print(f"last_edit:\n{last_edit}embed:\n{embed}")
 
 
     # TODO: Hook this up to ELO system once DB is hooked up
@@ -309,13 +322,29 @@ class QuadChat(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message) -> None:
         if isinstance(before.channel, discord.DMChannel):
-            print("Ignoring DM edit")
+            print("Ignoring DM message edit")
             return
 
         print("Message edit:")
         print(f"Before: {before.content}\n After: {after.content}")
 
-        self.edited_msg = {"before": before.content, "after": after.content}
+        if before.guild is None:
+            print("Error: guild id is None. Skipping message storage")
+            return
+
+        guild_id = before.guild.id
+        self.edited_msgs[guild_id] = (before, after)
+
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, msg: discord.Message) -> None:
+        if isinstance(msg, discord.DMChannel):
+            print("Ignoring DM message deletion")
+            return
+
+        print(f"User {msg.author} deleted message:")
+        print(f"{msg.content}")
+        
 
 
     @commands.Cog.listener()

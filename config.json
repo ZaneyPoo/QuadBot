@@ -12,6 +12,24 @@
             "enabled": true,
             "react_type": "reaction", 
             "content": ":karla:"
+        },
+        "balls":
+        {
+            "enabled": true,
+            "react_type": "reply", 
+            "content": "balls"
+        },
+        "skull":
+        {
+            "enabled": true,
+            "react_type": "reaction", 
+            "content": ":skull:"
+        },
+        "[Ss]ame as it ever was":
+        {
+            "enabled": true,
+            "react_type": "reply", 
+            "content": "https://tenor.com/view/david-byrne-same-as-it-ever-was-always-has-been-same-gif-22266189"
         }
     },
 
@@ -19,6 +37,7 @@
     {
         ":karla:": "<:karla:1175357148318924840>",
         ":zane:": "<a:zane:1141487995464204351>",
+        ":shawty:" : "<:shawty:1266648166862950491>",
         ":patrick:": "<:patrick:1141882273860440094>",
         ":nominate:": ":star:"
     },
@@ -39,7 +58,11 @@
         "Who the fuck taught you to type?",
         "I'm not even gonna dignify this with a response.",
         "Usually, I'd give an actually helpful error message. Usually.",
-        "Nani??"
+        "Nani??",
+        "I don't speak brainrot.",
+        "Sorry, pimp. I didn't catch that",
+        "Erhm, what the sigma?",
+        "That's not very skibid ong"
     ],
 
     "reject_messages": 
@@ -77,6 +100,64 @@
         "Stealing from Zuul",
         "Eating a gyro",
         "Having a big, fat greek wedding",
-        "Doxxing Drew"
+        "Doxxing Drew",
+        "Losing at Finals",
+        "Falling asleep during a meeting",
+        "Losing at Hunt",
+        "Selling my child for more merge turns",
+        "Talking to chat",
+        "Chat, am I real?",
+        "Chat, are you real?",
+        "Chat, is this real",
+        "Stimming",
+        "Idling my GPU at 90° C.",
+        "Having Audio Issues",
+        "Having perfect audio",
+        "Literally dying",
+        "*pipe sound*",
+        "Deafening you during an emotional conversation",
+        "Helping Alex w/ his homework",
+        "Having a ontological discussion about sandwiches",
+        "Failing Karla's class (again)",
+        "Waiting for VR Day",
+        "Gambling w/ Jay (Down $10,000)",
+        "Gambling w/ Jay (Up $1,000)",
+        "Viewing Jay's brainrot from a safe distance",
+        "Losing at Barotrauma",
+        "Harassing the engineer about the reactor",
+        "Competing to fuck the hottest monster",
+        "Attending R. Kelly meetings",
+        "Stimming. Still.",
+        "Being fucking bored",
+        "Talking only in gifs",
+        "Talking about plants",
+        "Playing Class of '09",
+        "Playing Russian Roulette w/ a shotgun",
+        "Letting the dogs out",
+        "Letting the dogs out (for free)",
+        "Being a lil toxic, as a treat.",
+        "Talking about ADHD",
+        "Waiting for Zane to stop typing",
+        "Driving to Hillsboro",
+        "Eating Sour Patch Kids",
+        "Smoking literal crack (Merge Valley)",
+        "Hypothetically building a 4x4 monitor grid",
+        "Overengineering",
+        "Writing status messages for QuadBot",
+        "Flirting w/ ChatGPT",
+        "Ignoring Alex's messages",
+        "Emailing Mark Jones",
+        "Emailing Alex Jones",
+        "Fixing my PC (Again)",
+        "Being hungy",
+        "Being a lil shit in the chat",
+        "Playing Nidhogg Arcade",
+        "Turning a sphere inside out w/o cutting a hole",
+        "Spamming meow",
+        "Doxxing Ms. Britt",
+        "Walking in the dark with 0% sanity",
+        "Losing at Phasmophobia",
+        "Talking to you fucking never",
+        "Telling you to GTSB"
     ]
 }

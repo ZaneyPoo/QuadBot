@@ -112,6 +112,7 @@ class QuadReact(commands.Cog):
 
 
     def _init_chathooks(self) -> None:
+        # TODO: load these from a json file instead if possible
         default_hooks = [
             ReplyHook(
                 pattern="balls", 
@@ -120,6 +121,10 @@ class QuadReact(commands.Cog):
             ReactHook(
                 pattern="skull", 
                 response=chr(0x1f480)
+            ),
+            ReplyHook(
+                pattern=r"[Ss]ame as it ever was",
+                response="https://tenor.com/view/david-byrne-same-as-it-ever-was-always-has-been-same-gif-22266189",
             ),
             EventHook(
                 pattern=r"\w+\+\+|<@!?\d+> \+\+", # Matches for a name or mention followed by ++

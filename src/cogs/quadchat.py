@@ -308,8 +308,13 @@ class QuadChat(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message) -> None:
+        if isinstance(before.channel, discord.DMChannel):
+            print("Ignoring DM edit")
+            return
+
         print("Message edit:")
         print(f"Before: {before.content}\n After: {after.content}")
+
         self.edited_msg = {"before": before.content, "after": after.content}
 
 

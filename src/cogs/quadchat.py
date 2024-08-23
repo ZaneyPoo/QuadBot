@@ -279,14 +279,12 @@ class QuadChat(commands.Cog):
     async def antisnake(self, ctx: commands.Context) -> None:
         # This should prevent use outside the context of Guilds
         if ctx.guild is None:
-            print("guild is none")
             await ctx.reply("Antisnake is only available for servers :/")
             return
 
         last_edit = self.edited_msgs.get(ctx.guild.id)
 
         if last_edit is None:
-            print("last_edit is none")
             await ctx.reply("No recently edited messages :sob:")
             return
 
@@ -296,7 +294,6 @@ class QuadChat(commands.Cog):
             description=_ANTI_SNAKE_EMBED_TEMPLATE.format(before=before.content, after=after.content)
         ).set_author(name=before.author.display_name, icon_url=before.author.display_avatar)
         await ctx.reply(embed=embed)
-        print(f"last_edit:\n{last_edit}embed:\n{embed}")
 
 
     # TODO: Hook this up to ELO system once DB is hooked up

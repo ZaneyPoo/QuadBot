@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -13,11 +14,11 @@ discord.utils.setup_logging(level=logging.DEBUG)
 
 _ANTI_SNAKE_EMBED_TEMPLATE = (
 """
-**Before**: 
-{before}
+**Original**: 
+{original}
 
-**After**:
-{after}
+**Edited**:
+{edited}
 """.strip())
 
 UNSNAKEABLE_CONTEXTS = (discord.DMChannel, discord.GroupChannel)
@@ -252,8 +253,8 @@ class QuadChat(commands.Cog):
     # TODO: Define shutdown command to save variable values to config.json
     def __init__(self, bot: QuadBot) -> None:
         self.bot = bot
-        self.edited_msgs: dict[int, tuple[discord.Message, discord.Message]] = {}
-        self.deleted_msgs: dict[int, discord.Message] = {}
+        self.edited_msgs: dict[int, tuple[discord.Message, discord.Message, datetime]] = {}
+        self.deleted_msgs: dict[int, tuple[discord.Message, datetime]] = {}
 
 
     @commands.command()
@@ -288,11 +289,26 @@ class QuadChat(commands.Cog):
             await ctx.reply("No recently edited messages :sob:")
             return
 
-        before, after = last_edit
+        original, edited, time_of_edit = last_edit
+
+        # TODO: extract to factory function
         embed = discord.Embed(
             title=":x: :snake: Antisnake! :x: :snake:",
-            description=_ANTI_SNAKE_EMBED_TEMPLATE.format(before=before.content, after=after.content)
-        ).set_author(name=before.author.display_name, icon_url=before.author.display_avatar)
+            url=original.jump_url,
+            timestamp=time_of_edit
+        ).add_field(
+            name="Original",
+            value=original.content,
+            inline=False
+        ).add_field(
+            name="Edited",
+            value=edited.content,
+            inline=False
+        ).set_author(
+            name=original.author.display_name, 
+            icon_url=original.author.display_avatar
+        ).set_footer()
+
         await ctx.reply(embed=embed)
 
 
@@ -317,31 +333,33 @@ class QuadChat(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_message_edit(self, before: discord.Message, after: discord.Message) -> None:
-        if isinstance(before.channel, discord.DMChannel):
-            print("Ignoring DM message edit")
+    async def on_message_edit(self, original: discord.Message, edited: discord.Message) -> None:
+        timestamp = datetime.now()
+
+        if original.guild is None:
+            print("guild id is None. Skipping message storage")
             return
 
         print("Message edit:")
-        print(f"Before: {before.content}\n After: {after.content}")
+        print(f"Original: {original.content}\n Edited: {edited.content}")
 
-        if before.guild is None:
-            print("Error: guild id is None. Skipping message storage")
-            return
-
-        guild_id = before.guild.id
-        self.edited_msgs[guild_id] = (before, after)
+        guild_id = original.guild.id
+        self.edited_msgs[guild_id] = (original, edited, timestamp)
 
 
-    @commands.Cog.listener()
-    async def on_message_delete(self, msg: discord.Message) -> None:
-        if isinstance(msg, discord.DMChannel):
-            print("Ignoring DM message deletion")
-            return
+    # TODO: Figure out best way to get the deleter of the message
+    #       We could check for the most recent audit log and if the message id isn't a match
+    #       then we know that the original author deleted it
+    # @commands.Cog.listener()
+    # async def on_message_delete(self, msg: discord.Message) -> None:
+    #     timestamp = datetime.now()
 
-        print(f"User {msg.author} deleted message:")
-        print(f"{msg.content}")
-        
+    #     if isinstance(msg, discord.DMChannel):
+    #         print("Ignoring DM message deletion")
+    #         return
+
+    #     print(f"User {msg.author} deleted message:")
+    #     print(f"{msg.content}")
 
 
     @commands.Cog.listener()

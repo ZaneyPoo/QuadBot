@@ -10,7 +10,7 @@ from quadbot import QuadBot
 # TODO: Consider turning this into a function that returns the correct prefix
 #       based on some conditions (msg is in the test guild, etc.)
 PROD_PREFIX = '?'
-TEST_PREFIX = '~'
+TEST_PREFIX = 'go go quadbot '
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -27,7 +27,7 @@ async def load_extensions(bot: commands.Bot) -> None:
 
 
 async def main() -> None:
-    prefix = PROD_PREFIX if os.getenv("QUADBOT_TESTING") is None else TEST_PREFIX
+    prefix = TEST_PREFIX if "QUADBOT_TESTING" in os.environ else PROD_PREFIX
     print(f"Setting prefix to '{prefix}'", file=sys.stderr)
 
 

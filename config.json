@@ -2,7 +2,9 @@
 
     "options":
     {
-        "status_update_interval_mins": 60.0
+        "status_update_interval_mins": 60.0,
+        "audit_log_search_limit": 1000,
+        "msg_log_search_limit": 10000
     },
 
     "react_hooks":

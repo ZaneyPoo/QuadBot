@@ -257,6 +257,25 @@ class QuadChat(commands.Cog):
         self.deleted_msgs: dict[int, tuple[discord.Message, datetime]] = {}
 
 
+    @commands.command(
+            name = "say",
+            description = "Puppet me and make me say despicable things. You sick fuck.",
+            )
+    async def say(self,
+                  ctx: commands.Context,
+                  *,
+                  arg: typing.Optional[str] = commands.parameter(
+                      default="*QuadBot stares blankly*",
+                      description="Your incredibly offensive message")
+                  ) -> None:
+        try:
+            await ctx.message.delete()
+        except Exception as e:
+            ctx.reply(f"I don't have proper perms to delete your message. Get leaked, dumbass.")
+            print(f"Exception: {e}")
+        await ctx.send(arg)
+
+
     @commands.command()
     async def stats(self, 
                     ctx: commands.Context, 
